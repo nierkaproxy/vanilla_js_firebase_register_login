@@ -1,7 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getDatabase, set, update, ref } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from
     "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -10,7 +16,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 // Your web app's Firebase configuration
 const firebaseConfig = {
     //write your data
-  
+    
 
 };
 
@@ -29,7 +35,7 @@ const registerNewUser = () => {
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            
+
             set(ref(database, 'users/' + user.uid), {
                 user_email: register_email,
                 user_username: register_username
@@ -56,7 +62,7 @@ const loginUser = () => {
             const loginTime = new Date()
             update(ref(database, 'users/' + user.uid), {
                 last_login: loginTime
-               
+
             });
             console.log(user, "Login successful!");
         })
@@ -67,3 +73,32 @@ const loginUser = () => {
         });
 }
 document.getElementById('signIn').addEventListener('click', loginUser);
+
+//geting signed-in user
+const user = auth.currentUser;
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        //write your code what user can do 
+        //or what kind of functionalities can see when he is login
+        const uid = user.uid;
+        // ...
+    } else {
+        // User is signed out
+        // ...
+    }
+});
+
+//sign-out
+document.getElementById('signOut').addEventListener('click', () => {
+    signOut(auth).then(() => {
+        // Sign-out successful.
+        alert('Sign-out successful!')
+    }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+    });
+})
+
