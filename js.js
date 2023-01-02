@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword } from
+import { getDatabase, set, update, ref } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from
     "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -9,8 +9,8 @@ import { getAuth, createUserWithEmailAndPassword } from
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-   //write your data
-   
+    //write your data
+  
 
 };
 
@@ -21,18 +21,18 @@ const auth = getAuth();
 
 //new user registration
 const registerNewUser = () => {
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const register_username = document.getElementById('register_username').value;
+    const register_email = document.getElementById('register_email').value;
+    const register_password = document.getElementById('register_password').value;
 
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, register_email, register_password)
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
             
-            set(ref(database, 'users/' + user.uid),{
-                user_email: email,
-                user_username: username
+            set(ref(database, 'users/' + user.uid), {
+                user_email: register_email,
+                user_username: register_username
             });
             console.log('New User created!')
         })
@@ -43,3 +43,27 @@ const registerNewUser = () => {
         });
 }
 document.getElementById('signUp').addEventListener('click', registerNewUser);
+
+//Login existing User
+const loginUser = () => {
+    const login_email = document.getElementById('login_email').value;
+    const login_password = document.getElementById('login_password').value;
+
+    signInWithEmailAndPassword(auth, login_email, login_password)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            const loginTime = new Date()
+            update(ref(database, 'users/' + user.uid), {
+                last_login: loginTime
+               
+            });
+            console.log(user, "Login successful!");
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorMessage);
+        });
+}
+document.getElementById('signIn').addEventListener('click', loginUser);
