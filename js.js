@@ -10,6 +10,8 @@ import { getAuth, createUserWithEmailAndPassword } from
 // Your web app's Firebase configuration
 const firebaseConfig = {
    //write your data
+   
+
 };
 
 // Initialize Firebase, database, authentication
