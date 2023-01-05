@@ -15,10 +15,14 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    //write your data
-    
-
-};
+    apiKey: "AIzaSyChgm_r_Uoav6I1IkkhvXfKNPhQqnEMg5Y",
+    authDomain: "skelbimailogin.firebaseapp.com",
+    databaseURL: "https://skelbimailogin-default-rtdb.firebaseio.com",
+    projectId: "skelbimailogin",
+    storageBucket: "skelbimailogin.appspot.com",
+    messagingSenderId: "327927736671",
+    appId: "1:327927736671:web:ea8813682302515834aeea"
+  };
 
 // Initialize Firebase, database, authentication
 const app = initializeApp(firebaseConfig);
@@ -76,6 +80,8 @@ document.getElementById('signIn').addEventListener('click', loginUser);
 
 //geting signed-in user
 const user = auth.currentUser;
+const login = document.querySelectorAll('.left, .right > h1 ,#login_email, #login_password, #signIn, .or')
+const loginBox = document.querySelector('#login-box');
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // User is signed in, see docs for a list of available properties
@@ -83,10 +89,22 @@ onAuthStateChanged(auth, (user) => {
         //write your code what user can do 
         //or what kind of functionalities can see when he is login
         const uid = user.uid;
-        // ...
+       
+        login.forEach(element => {
+            element.style.display = 'none';
+          });
+          const signOut = document.getElementById('signOut')
+          signOut.style.display = 'block';
+          loginBox.style.height = '150px';
     } else {
         // User is signed out
-        // ...
+        login.forEach(element => {
+            element.style.display = 'block';
+          });
+        const signOut = document.getElementById('signOut')
+        signOut.style.display = 'none';
+        loginBox.style.height = '400px';
+        console.log('logged out')
     }
 });
 
